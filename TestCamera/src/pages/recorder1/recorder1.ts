@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { Media, MediaObject } from '@ionic-native/media';
 import { File } from '@ionic-native/file';
+
 
 /**
  * Generated class for the Recorder1Page page.
@@ -23,9 +24,8 @@ export class Recorder1Page {
   audio: MediaObject;
   audioList: any[] = [];
   audioListPlaying: boolean[] = [];
-  
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private media:Media, private file:File, public platform:Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private media:Media, private file:File, public platform:Platform, private changeDetectorRef: ChangeDetectorRef) {
   }
 
   getAudioList(){
@@ -74,15 +74,35 @@ export class Recorder1Page {
       this.filePath = this.file.externalDataDirectory.replace(/file:\/\//g, '') + file;
       this.audio = this.media.create(this.filePath);
     }
+    var j;
+    for(j=0;j<this.audioListPlaying.length;j++){
+    	//this.pauseAudio(this.audioList[j].filename, j);
+    	if(this.audioListPlaying[j]){
+    		return;
+    	}
+    	this.audioListPlaying[j] = false; 
+    }
+    for(j=0;j<this.audioList.length;j++){
+    	this.pauseAudio(this.audioList[j].filename, j);
+    }
+
     this.audio.play();
-    //this.playing = true;
     this.audio.setVolume(0.8);
     this.audioListPlaying[idx] = true;
+    this.changeDetectorRef.detectChanges();
+    this.audio.onStatusUpdate.subscribe((statusCode)=>{
+    	if(statusCode == 4){
+    		this.audioListPlaying[idx] = false;
+    		this.changeDetectorRef.detectChanges();
+    	}
+    	});
+    //this.playing = true;
   }
 
   pauseAudio(file,idx) {
     this.audio.pause();
     this.audioListPlaying[idx] = false;
+    this.changeDetectorRef.detectChanges();
   }
 
   ionViewDidLoad() {

@@ -14,7 +14,7 @@ import { Recorder1Page } from '../recorder1/recorder1';
 export class HomePage {
   camera1 = Camera1Page;
   recorder1 = Recorder1Page;
-  myphoto:any;
+  /*myphoto:any;
   recording:boolean = false;
   filePath: string;
   fileName: string;
@@ -22,10 +22,11 @@ export class HomePage {
   audioList: any[] = [];
   audioListPlaying: boolean[] = [];
   playing:boolean = true;
+  */
   constructor(public navCtrl: NavController, private camera:Camera, private media:Media, private file:File, public platform:Platform) {
 
   }
-  getAudioList(){
+  /*getAudioList(){
   	if(localStorage.getItem("audiolist")){
   		this.audioList = JSON.parse(localStorage.getItem("audiolist"));
   		console.log(this.audioList);
@@ -96,6 +97,6 @@ export class HomePage {
   		console.log("Error encountered", err);
   		//handle error
   	});
-  }
+  }*/
 
 }
